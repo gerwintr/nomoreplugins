@@ -1,3 +1,5 @@
+//this works
+
 buildscript {
     repositories {
         gradlePluginPortal()
@@ -5,46 +7,55 @@ buildscript {
 }
 
 plugins {
-    java
+    java //this enables annotationProcessor and implementation in dependencies
     checkstyle
 }
 
-project.extra["GithubUrl"] = "https://github.com/Pinqer/nomoreplugins"
+project.extra["GithubUrl"] = "https://github.com/illumineawake/illu-plugins"
 
 apply<BootstrapPlugin>()
-apply<VersionPlugin>()
+
+allprojects {
+    group = "com.openosrs.externals"
+    apply<MavenPublishPlugin>()
+}
+
+allprojects {
+    apply<MavenPublishPlugin>()
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+}
 
 subprojects {
     group = "com.openosrs.externals"
 
-    project.extra["PluginProvider"] = "Eric"
-    project.extra["ProjectUrl"] = "SUPPORT LINK"
-    project.extra["PluginLicense"] = "GNU General Public License v3.0"
+    project.extra["PluginProvider"] = "illumine"
+    project.extra["ProjectSupportUrl"] = "https://discord.gg/9fGzEDR"
+    project.extra["PluginLicense"] = "3-Clause BSD License"
 
     repositories {
-        maven {
-            url = uri("SUPPORT LINK")
+        jcenter {
+            content {
+                excludeGroupByRegex("com\\.openosrs.*")
+            }
         }
-        jcenter()
-        maven(url = "https://repo.runelite.net")
-        maven(url = "https://repo.openosrs.com/repository/maven")
-        mavenLocal()
-        mavenCentral()
+
         exclusiveContent {
             forRepository {
-                maven {
-                    url = uri("https://raw.githubusercontent.com/open-osrs/hosting/master")
-                }
+                mavenLocal()
             }
             filter {
-                includeModule("net.runelite", "fernflower")
-                includeModule("com.openosrs.rxrelay3", "rxrelay")
+                includeGroupByRegex("com\\.openosrs.*")
+                includeGroupByRegex("com\\.owain.*")
             }
         }
     }
+
     apply<JavaPlugin>()
-    apply<JavaLibraryPlugin>()
-    apply(plugin = "checkstyle")
 
     dependencies {
         annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.12")
@@ -53,13 +64,6 @@ subprojects {
         implementation(group = "com.google.code.gson", name = "gson", version = "2.8.6")
         implementation(group = "com.google.guava", name = "guava", version = "28.2-jre")
         implementation(group = "com.google.inject", name = "guice", version = "4.2.3", classifier = "no_aop")
-        implementation(group = "com.openosrs", name = "http-api", version = "3.3.5")
-        implementation(group = "com.openosrs", name = "injected-client", version = "3.3.5")
-        implementation(group = "com.openosrs", name = "runelite-api", version = "3.3.5")
-        implementation(group = "com.openosrs", name = "runelite-client", version = "3.3.5")
-        implementation(group = "com.openosrs.rs", name = "runescape-api", version = "3.3.5")
-        implementation(group = "com.openosrs.rs", name = "runescape-client", version = "3.3.5")
-        implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.5.0")
         implementation(group = "com.squareup.okhttp3", name = "okhttp", version = "4.5.0")
         implementation(group = "io.reactivex.rxjava3", name = "rxjava", version = "3.0.2")
         implementation(group = "net.sf.jopt-simple", name = "jopt-simple", version = "5.0.4")
@@ -67,18 +71,34 @@ subprojects {
         implementation(group = "org.pf4j", name = "pf4j", version = "3.2.0")
         implementation(group = "org.projectlombok", name = "lombok", version = "1.18.12")
         implementation(group = "org.pushing-pixels", name = "radiance-substance", version = "2.5.1")
-    }
 
-    checkstyle {
-        maxWarnings = 0
-        toolVersion = "8.25"
-        isShowViolations = true
-        isIgnoreFailures = true
+        compileOnly("com.openosrs:runelite-api:3.4.3")
+        compileOnly("com.openosrs.rs:runescape-api:3.4.3")
+        compileOnly("com.openosrs:runelite-client:3.4.3")
+        compileOnly("com.openosrs:http-api:3.4.3")
+
+        compileOnly(Libraries.guice)
+        //compileOnly(Libraries.javax)
+        compileOnly(Libraries.lombok)
+        compileOnly(Libraries.pf4j)
     }
 
     configure<JavaPluginConvention> {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    configure<PublishingExtension> {
+        repositories {
+            maven {
+                url = uri("$buildDir/repo")
+            }
+        }
+        publications {
+            register("mavenJava", MavenPublication::class) {
+                from(components["java"])
+            }
+        }
     }
 
     tasks {
@@ -90,8 +110,7 @@ subprojects {
             doLast {
                 copy {
                     from("./build/libs/")
-                    //into(System.getProperty("user.home") + "/.runelite/externalmanager") // will build for quick openosrs access
-                    into("C:\\Users\\ericf\\IdeaProjects\\nomorepluginsfork\\release") // will build into the release folder.
+                    into(System.getProperty("user.home") + "/OneDrive/Dokument/JavaProjects/My Plugin Jars")
                 }
             }
         }
@@ -101,10 +120,6 @@ subprojects {
             isReproducibleFileOrder = true
             dirMode = 493
             fileMode = 420
-        }
-
-        withType<Checkstyle> {
-            group = "verification"
         }
     }
 }

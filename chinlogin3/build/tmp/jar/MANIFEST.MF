@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Plugin-Version: 3.0.7
-Plugin-Id: chingplingdong-plugin
-Plugin-Provider: Eric
-Plugin-Description: Automatically logs you in on the login screen becaus
- e a 6 hour log is annoying 3
-Plugin-License: GNU General Public License v3.0
-

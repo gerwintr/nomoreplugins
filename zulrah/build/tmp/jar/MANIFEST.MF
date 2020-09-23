@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
-Plugin-Version: 0.0.2
-Plugin-Id: pinqszulrah-plugin
-Plugin-Provider: Eric
-Plugin-Dependencies: botutils-plugin
-Plugin-Description: Alpha version // doesnt work
-Plugin-License: GNU General Public License v3.0
+Plugin-Version: 0.0.7
+Plugin-Id: pinqszulrahhelper-plugin
+Plugin-Provider: illumine
+Plugin-Dependencies: botutils-plugin, chinbreakhandler-plugin
+Plugin-Description: Shows tiles on where to stand during the phases and 
+ what prayer to use
+Plugin-License: 3-Clause BSD License
 

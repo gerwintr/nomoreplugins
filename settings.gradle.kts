@@ -1,17 +1,7 @@
 rootProject.name = "ericsplugins"
 
-include(":chatbox")
-include(":botutils")
-include(":ExtUtils")
 include(":pestcontrol")
 include(":mudrunecrafter")
-include(":chinlogin1")
-include(":chinlogin2")
-include(":chinlogin3")
-include(":chinlogin4")
-include(":autologin1")
-include(":autologin2")
-include(":autologin3")
 include(":xptracker")
 include(":tickfishing")
 include(":powerskiller")

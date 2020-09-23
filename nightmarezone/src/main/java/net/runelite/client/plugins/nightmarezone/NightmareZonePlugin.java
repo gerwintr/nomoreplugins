@@ -48,7 +48,6 @@ import net.runelite.client.plugins.botutils.BotUtils;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.HotkeyListener;
 import net.runelite.client.menus.MenuManager;
-import net.runelite.client.plugins.xptracker.XpTrackerService;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -81,8 +80,6 @@ public class NightmareZonePlugin extends Plugin {
     @Inject
     private BotUtils utils;
 
-    @Inject
-    public XpTrackerService xpTrackerService;
     @Inject
     private KeyManager keyManager;
 

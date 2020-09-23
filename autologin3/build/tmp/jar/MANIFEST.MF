@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Plugin-Version: 0.0.2
-Plugin-Id: pinqsautologinthree-plugin
-Plugin-Provider: Eric
-Plugin-Description: Auto logins THREE
-Plugin-License: GNU General Public License v3.0
-

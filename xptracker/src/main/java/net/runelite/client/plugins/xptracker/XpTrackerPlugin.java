@@ -74,6 +74,7 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.http.api.xp.XpClient;
+import okhttp3.OkHttpClient;
 import org.pf4j.Extension;
 
 @Extension
@@ -135,8 +136,8 @@ public class XpTrackerPlugin extends Plugin
 	private boolean fetchXp; // fetch lastXp for the online xp tracker
 	private long lastXp = 0;
 	private boolean initializeTracker;
-
-	private final XpClient xpClient = new XpClient();
+	public final OkHttpClient client1 = new OkHttpClient();
+	private final XpClient xpClient = new XpClient(client1);
 	private final XpState xpState = new XpState();
 	private final XpPauseState xpPauseState = new XpPauseState();
 

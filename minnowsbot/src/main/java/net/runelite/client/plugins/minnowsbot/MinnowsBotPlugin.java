@@ -36,7 +36,6 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
-import net.runelite.client.input.MouseListener;
 import net.runelite.client.menus.MenuManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
@@ -44,7 +43,6 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginType;
 import net.runelite.client.plugins.botutils.BotUtils;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.util.HotkeyListener;
 //import net.runelite.client.plugins.chinbreakhandler.ChinBreakHandler;
 import org.pf4j.Extension;
 
@@ -58,8 +56,8 @@ import static net.runelite.client.plugins.minnowsbot.MinnowsBotState.*;
 
 @Extension
 @PluginDescriptor(
-        name = "Pinq's Minoows3",
-        description = "Catches Minnows so you don't have to",
+        name = "Pinq's Minnows",
+        description = "Clicks minnows",
         tags = {"pinqer", "Fishing", "Tick"},
         type = PluginType.SKILLING
 )

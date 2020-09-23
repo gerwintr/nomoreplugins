@@ -146,21 +146,21 @@ public class PestControlPlugin extends Plugin {
 				    if (isInNewGame()) {
 				        log.info("new game");
                     }
-                    NPC target = utils.findNearestNpcWithin(player.getWorldLocation(), 25, "Brawler", "Defiler", "Ravager", "Shifter", "Torcher");
+                    NPC target = utils.findNearestNpc("Brawler", "Defiler", "Ravager", "Shifter", "Torcher");
                     // Simulate a loop because sleeps doesn't work without freezing the fkn client
                     if (count < 7 && target == null && !isInNewGame()) {
                         log.info("Coudn't find a target, trying again: " + count);
-                        target = utils.findNearestNpcWithin(player.getWorldLocation(), 25, "Brawler", "Defiler", "Ravager", "Shifter", "Torcher");
+                        target = utils.findNearestNpc("Brawler", "Defiler", "Ravager", "Shifter", "Torcher");
                         count++;
                         return;
                     }
                     count = 0;
                     // Priority check for NPCs
-					NPC nearbyBrawler = utils.findNearestNpcWithin(player.getWorldLocation(), 5, "Brawler");
+					NPC nearbyBrawler = utils.findNearestNpc("Brawler");
 					if (nearbyBrawler != null) {
 						target = nearbyBrawler;
 					}
-					NPC priorityTarget = utils.findNearestNpcWithin(player.getWorldLocation(), 25, NpcID.PORTAL, NpcID.PORTAL_1740, NpcID.PORTAL_1741, NpcID.PORTAL_1742,
+					NPC priorityTarget = utils.findNearestNpc(NpcID.PORTAL, NpcID.PORTAL_1740, NpcID.PORTAL_1741, NpcID.PORTAL_1742,
 							NpcID.SPINNER, NpcID.SPINNER_1710, NpcID.SPINNER_1711, NpcID.SPINNER_1712, NpcID.SPINNER_1713); //Colored portals & spinners
 					if (priorityTarget != null) {
 						target = priorityTarget;

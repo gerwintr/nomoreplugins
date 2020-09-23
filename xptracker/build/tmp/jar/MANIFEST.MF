@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Plugin-Version: 0.0.7
 Plugin-Id: xptracker-plugin
-Plugin-Provider: Eric
+Plugin-Provider: illumine
 Plugin-Description: Enable the XP Tracker panel
-Plugin-License: GNU General Public License v3.0
+Plugin-License: 3-Clause BSD License
 

@@ -76,7 +76,7 @@ class PowerSkillerOverlay extends OverlayPanel
 			panelComponent.setPreferredSize(new Dimension(200, 200));
 			panelComponent.setBorder(new Rectangle(5, 5, 5, 5));
 			panelComponent.getChildren().add(TitleComponent.builder()
-				.text("Pinq's Power Skiller")
+				.text("Illumine Power Skiller")
 				.color(ColorUtil.fromHex("#40C4FF"))
 				.build());
 			panelComponent.getChildren().add(tableComponent);

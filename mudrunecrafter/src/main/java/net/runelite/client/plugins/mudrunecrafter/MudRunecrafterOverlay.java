@@ -21,7 +21,6 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 import net.runelite.client.ui.overlay.components.table.TableAlignment;
 import net.runelite.client.ui.overlay.components.table.TableComponent;
 import net.runelite.client.util.ColorUtil;
-import net.runelite.client.plugins.xptracker.XpTrackerService;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 
 @Slf4j
@@ -35,9 +34,6 @@ class MudRunecrafterOverlay extends OverlayPanel
     String timeFormat;
     private String infoStatus = "Starting...";
     private int suppliesCost = 155000; // ESTIMATE
-
-    @Inject
-    private XpTrackerService xpTrackerService;
 
     @Inject
     private MudRunecrafterOverlay(final Client client, final MudRunecrafterPlugin plugin, final MudRunecrafterConfig config)
@@ -78,7 +74,6 @@ class MudRunecrafterOverlay extends OverlayPanel
             if (duration.toSeconds() != 0) {
                 double hoursIn = duration.toSeconds()*0.000277777778;
                 tableComponent.addRow("Gp/hr:", String.valueOf(Math.floor((plugin.mudRunePrice * plugin.runesCrafted / hoursIn)-suppliesCost)));
-                tableComponent.addRow("Xp/hr:", String.valueOf(xpTrackerService.getXpHr(Skill.RUNECRAFT)));
             } else {
                 tableComponent.addRow("Gp/hr:", "N/A");
                 tableComponent.addRow("Xp/hr:", "N/A");

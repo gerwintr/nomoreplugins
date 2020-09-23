@@ -29,7 +29,6 @@ import com.google.inject.Provides;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,9 +40,7 @@ import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
-import net.runelite.api.queries.BankItemQuery;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.Notifier;
 import net.runelite.client.chat.ChatMessageManager;
@@ -58,8 +55,6 @@ import net.runelite.client.plugins.PluginType;
 import net.runelite.client.plugins.botutils.BotUtils;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.HotkeyListener;
-import net.runelite.client.plugins.xptracker.XpTrackerService;
-import net.runelite.rs.api.RSTile;
 import org.pf4j.Extension;
 
 
@@ -87,9 +82,6 @@ public class MudRunecrafterPlugin extends Plugin {
 
     @Inject
     private BotUtils utils;
-
-    @Inject
-    private XpTrackerService xpTrackerService;
 
     @Inject
     private Notifier notifier;

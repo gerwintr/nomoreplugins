@@ -29,7 +29,8 @@ project.extra["PluginName"] = "Pinq's Pest Control"
 project.extra["PluginDescription"] = "Does Pest Control so you don't have to"
 
 dependencies {
-    implementation(project(":botutils"))
+    compileOnly(group = "com.openosrs.externals", name = "botutils", version = "3.9.6");
+    compileOnly(group = "com.owain.externals", name = "chinbreakhandler", version = "0.0.13+")
 }
 
 tasks {
@@ -39,7 +40,11 @@ tasks {
                     "Plugin-Version" to project.version,
                     "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
                     "Plugin-Provider" to project.extra["PluginProvider"],
-                    "Plugin-Dependencies" to nameToId("botutils"),
+                    "Plugin-Dependencies" to
+                            arrayOf(
+                                    "botutils-plugin",
+                                    "chinbreakhandler-plugin"
+                            ).joinToString(),
                     "Plugin-Description" to project.extra["PluginDescription"],
                     "Plugin-License" to project.extra["PluginLicense"]
             ))

@@ -169,11 +169,11 @@ public class GargoyleFighterPlugin extends Plugin {
         }
 
         // Combat code
-        NPC target = utils.findNearestAttackableNpcWithin(player.getWorldLocation(), 40, "Gargoyle");
+        NPC target = utils.findNearestAttackableNpcWithin(player.getWorldLocation(), 40, "gargoyle", false);
         if (target != null) { // Found a target
             log.info("Found target");
             utils.sendGameMessage("found target");
-            NPC targetingCheck = utils.findNearestNpcTargetingLocal("gargoyle");
+            NPC targetingCheck = utils.findNearestNpcTargetingLocal("gargoyle", false);
             if (player.getInteracting() != null) { // If player is interacting
                 log.info("Interacting");
                 utils.sendGameMessage("interacting");

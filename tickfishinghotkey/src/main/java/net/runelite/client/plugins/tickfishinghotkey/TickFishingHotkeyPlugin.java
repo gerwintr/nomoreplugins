@@ -60,7 +60,7 @@ import java.time.Instant;
 @Extension
 @PluginDescriptor(
         name = "Pinq's Herb-Tar hotkey",
-        description = "Does 3 Tick Fishing Flawlessly",
+        description = "Does 3 Tick Fishing Flawlessly with hotkey",
         tags = {"pinqer", "Fishing", "3 Tick", "Tick"},
         type = PluginType.SKILLING
 )

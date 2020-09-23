@@ -29,11 +29,9 @@ project.extra["PluginName"] = "Pinq's Fishing trawler"
 project.extra["PluginDescription"] = "3 Ticks Flawlessly"
 
 dependencies {
-    implementation(project(":botutils"))
-    implementation(project(":xptracker"))
+    compileOnly(group = "com.openosrs.externals", name = "botutils", version = "3.9.6");
+    compileOnly(group = "com.owain.externals", name = "chinbreakhandler", version = "0.0.13+")
 }
-
-
 
 tasks {
     jar {
@@ -42,7 +40,11 @@ tasks {
                     "Plugin-Version" to project.version,
                     "Plugin-Id" to nameToId(project.extra["PluginName"] as String),
                     "Plugin-Provider" to project.extra["PluginProvider"],
-                    "Plugin-Dependencies" to nameToId("botutils"),
+                    "Plugin-Dependencies" to
+                            arrayOf(
+                                    "botutils-plugin",
+                                    "chinbreakhandler-plugin"
+                            ).joinToString(),
                     "Plugin-Description" to project.extra["PluginDescription"],
                     "Plugin-License" to project.extra["PluginLicense"]
             ))

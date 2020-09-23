@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Plugin-Version: 0.0.7
-Plugin-Id: chinpong-plugin
-Plugin-Provider: Eric
-Plugin-Description: Automatically logs you in on the login screen becaus
- e a 6 hour log is annoying
-Plugin-License: GNU General Public License v3.0
-
