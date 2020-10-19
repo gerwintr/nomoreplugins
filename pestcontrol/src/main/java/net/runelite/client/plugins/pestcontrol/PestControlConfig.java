@@ -254,7 +254,8 @@ public interface PestControlConfig extends Config
 		keyName = "toggleKey",
 		name = "Toggle Key",
 		description = "Key to toggle on / off",
-		position = 3
+		section = "firstTitle",
+		position = 17
 	)
 	default Keybind toggleKey()
 	{

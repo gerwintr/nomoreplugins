@@ -72,7 +72,12 @@ import org.pf4j.Extension;
 
 
 @Extension
-@PluginDescriptor(name = "Pinq's Pest Control", description = "Does Pest Control so you don't have to", tags = {"pinqer"}, type = PluginType.MINIGAME)
+@PluginDescriptor(
+	name = "Pinq's Pest Control",
+	description = "Does Pest Control so you don't have to",
+	tags = {"pinqer"},
+	type = PluginType.MINIGAME
+)
 
 @Slf4j
 @PluginDependency(iUtils.class)
@@ -195,7 +200,7 @@ public class PestControlPlugin extends Plugin
 					{
 						targetMenu = new MenuEntry("", "gangplank", gangplank.getId(), MenuOpcode.GAME_OBJECT_FIRST_OPTION.getId(),
 							gangplank.getSceneMinLocation().getX(), gangplank.getSceneMinLocation().getY(), false);
-						mouse.delayClickRandomPointCenter(-100, 100, sleepDelay());
+						mouse.delayMouseClick(gangplank.getConvexHull().getBounds(), sleepDelay());
 					}
 				}
 				else if (isInPestControl())
@@ -237,7 +242,7 @@ public class PestControlPlugin extends Plugin
 								log.info("Interacting and NPC has no health bar, finding new NPC");
 								targetMenu = new MenuEntry("", target.getName() + "(" + target.getId() + ")", target.getIndex(), MenuOpcode.NPC_SECOND_OPTION.getId(),
 									0, 0, false);
-								mouse.delayClickRandomPointCenter(-100, 100, sleepDelay());
+								mouse.delayMouseClick(target.getConvexHull().getBounds(), sleepDelay());
 							}
 						}
 						else
@@ -245,7 +250,7 @@ public class PestControlPlugin extends Plugin
 							log.info("Attacking new target");
 							targetMenu = new MenuEntry("", target.getName() + "(" + target.getId() + ")", target.getIndex(), MenuOpcode.NPC_SECOND_OPTION.getId(),
 								0, 0, false);
-							mouse.delayClickRandomPointCenter(-100, 100, sleepDelay());
+							mouse.delayMouseClick(target.getConvexHull().getBounds(), sleepDelay());
 						}
 					}
 					else
@@ -256,7 +261,7 @@ public class PestControlPlugin extends Plugin
 							log.info("No NPCs found, opening nearest gate");
 							targetMenu = new MenuEntry("", "gate", gate.getId(), MenuOpcode.GAME_OBJECT_FIRST_OPTION.getId(),
 								gate.getLocalLocation().getSceneX(), gate.getLocalLocation().getSceneY(), false);
-							mouse.delayClickRandomPointCenter(-100, 100, sleepDelay());
+							mouse.delayMouseClick(gate.getConvexHull().getBounds(), sleepDelay());
 						}
 					}
 				}
