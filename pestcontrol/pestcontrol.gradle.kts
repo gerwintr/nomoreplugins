@@ -23,13 +23,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "0.0.3"
+version = "1.0.0"
 
 project.extra["PluginName"] = "Pinq's Pest Control"
 project.extra["PluginDescription"] = "Does Pest Control so you don't have to"
 
 dependencies {
-    compileOnly(group = "com.openosrs.externals", name = "botutils", version = "3.9.6");
+    compileOnly(group = "com.openosrs.externals", name = "iutils", version = "1.0.0+")
     compileOnly(group = "com.owain.externals", name = "chinbreakhandler", version = "0.0.13+")
 }
 
@@ -42,7 +42,7 @@ tasks {
                     "Plugin-Provider" to project.extra["PluginProvider"],
                     "Plugin-Dependencies" to
                             arrayOf(
-                                    "botutils-plugin",
+                                    nameToId("iUtils"),
                                     "chinbreakhandler-plugin"
                             ).joinToString(),
                     "Plugin-Description" to project.extra["PluginDescription"],
