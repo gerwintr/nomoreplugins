@@ -27,14 +27,211 @@ package net.runelite.client.plugins.pestcontrol;
 import net.runelite.client.config.*;
 
 
-@ConfigGroup("test1")
+@ConfigGroup("PestControl")
 public interface PestControlConfig extends Config
 {
-	@ConfigTitleSection(
-			keyName = "firstTitle",
-			name = "Pest Control Config",
-			description = "",
-			position = 1
+	@ConfigSection(
+		keyName = "delayConfig",
+		name = "Sleep Delay Configuration",
+		description = "Configure how the bot handles sleep delays",
+		position = 1
+	)
+	default boolean delayConfig()
+	{
+		return false;
+	}
+
+	@Range(
+		min = 0,
+		max = 550
+	)
+	@ConfigItem(
+		keyName = "sleepMin",
+		name = "Sleep Min",
+		description = "",
+		position = 2,
+		section = "delayConfig"
+	)
+	default int sleepMin()
+	{
+		return 60;
+	}
+
+	@Range(
+		min = 0,
+		max = 550
+	)
+	@ConfigItem(
+		keyName = "sleepMax",
+		name = "Sleep Max",
+		description = "",
+		position = 3,
+		section = "delayConfig"
+	)
+	default int sleepMax()
+	{
+		return 350;
+	}
+
+	@Range(
+		min = 0,
+		max = 550
+	)
+	@ConfigItem(
+		keyName = "sleepTarget",
+		name = "Sleep Target",
+		description = "",
+		position = 4,
+		section = "delayConfig"
+	)
+	default int sleepTarget()
+	{
+		return 100;
+	}
+
+	@Range(
+		min = 0,
+		max = 550
+	)
+	@ConfigItem(
+		keyName = "sleepDeviation",
+		name = "Sleep Deviation",
+		description = "",
+		position = 5,
+		section = "delayConfig"
+	)
+	default int sleepDeviation()
+	{
+		return 10;
+	}
+
+	@ConfigItem(
+		keyName = "sleepWeightedDistribution",
+		name = "Sleep Weighted Distribution",
+		description = "Shifts the random distribution towards the lower end at the target, otherwise it will be an even distribution",
+		position = 6,
+		section = "delayConfig"
+	)
+	default boolean sleepWeightedDistribution()
+	{
+		return false;
+	}
+
+	@ConfigSection(
+		keyName = "delayTickConfig",
+		name = "Game Tick Configuration",
+		description = "Configure how the bot handles game tick delays, 1 game tick equates to roughly 600ms",
+		position = 7
+	)
+	default boolean delayTickConfig()
+	{
+		return false;
+	}
+
+	@Range(
+		min = 0,
+		max = 10
+	)
+	@ConfigItem(
+		keyName = "tickDelayMin",
+		name = "Game Tick Min",
+		description = "",
+		position = 8,
+		section = "delayTickConfig"
+	)
+	default int tickDelayMin()
+	{
+		return 1;
+	}
+
+	@Range(
+		min = 0,
+		max = 10
+	)
+	@ConfigItem(
+		keyName = "tickDelayMax",
+		name = "Game Tick Max",
+		description = "",
+		position = 9,
+		section = "delayTickConfig"
+	)
+	default int tickDelayMax()
+	{
+		return 3;
+	}
+
+	@Range(
+		min = 0,
+		max = 10
+	)
+	@ConfigItem(
+		keyName = "tickDelayTarget",
+		name = "Game Tick Target",
+		description = "",
+		position = 10,
+		section = "delayTickConfig"
+	)
+	default int tickDelayTarget()
+	{
+		return 2;
+	}
+
+	@Range(
+		min = 0,
+		max = 10
+	)
+	@ConfigItem(
+		keyName = "tickDelayDeviation",
+		name = "Game Tick Deviation",
+		description = "",
+		position = 11,
+		section = "delayTickConfig"
+	)
+	default int tickDelayDeviation()
+	{
+		return 1;
+	}
+
+	@ConfigItem(
+		keyName = "tickDelayWeightedDistribution",
+		name = "Game Tick Weighted Distribution",
+		description = "Shifts the random distribution towards the lower end at the target, otherwise it will be an even distribution",
+		position = 12,
+		section = "delayTickConfig"
+	)
+	default boolean tickDelayWeightedDistribution()
+	{
+		return false;
+	}
+
+	@ConfigSection(
+		keyName = "instructionsTitle",
+		name = "Instructions",
+		description = "Instructions Title",
+		position = 13
+	)
+	default boolean instructionsTitle()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "instructions",
+		name = "",
+		description = "Instructions. Don't enter anything into this field",
+		position = 14,
+		section = "instructionsTitle"
+	)
+	default String instructions()
+	{
+		return "Stand somewhere on Pest Control Island when pressing the hotkey you have bound in the config to start the plugin.\n\nThis plugin works best with ranged but melee also works.";
+	}
+
+	@ConfigSection(
+		keyName = "firstTitle",
+		name = "Pest Control Config",
+		description = "",
+		position = 15
 	)
 	default Title firstTitle()
 	{
@@ -42,29 +239,49 @@ public interface PestControlConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "toggleKey",
-			name = "Toggle Key",
-			description = "Key to toggle on / off",
-			position = 2
+		keyName = "boatSelect",
+		name = "Boat",
+		description = "Choose which boat to enter",
+		section = "firstTitle",
+		position = 16
+	)
+	default Boat boatSelect()
+	{
+		return Boat.NOVICE;
+	}
+
+	@ConfigItem(
+		keyName = "toggleKey",
+		name = "Toggle Key",
+		description = "Key to toggle on / off",
+		section = "firstTitle",
+		position = 17
 	)
 	default Keybind toggleKey()
 	{
 		return Keybind.NOT_SET;
 	}
 
-	@ConfigItem(
-			keyName = "camperMode",
-			name = "Camper mode (sniper tower)",
-			description = "Snipes nearby NPCs within range of tower",
-			position = 3
+	@ConfigSection(
+		keyName = "extraTitle",
+		name = "Extra Config",
+		description = "Don't use these unless requested.",
+		position = 51
 	)
-	default boolean camperMode() { return false; }
+	default boolean extraTitle()
+	{
+		return false;
+	}
 
 	@ConfigItem(
-			keyName = "logParams",
-			name = "Log MenuEntry Parameters",
-			description = "Logs MenuEntry options",
-			position = 6
+		keyName = "logParams",
+		name = "Log MenuEntry Parameters",
+		description = "Logs MenuEntry options",
+		section = "extraTitle",
+		position = 52
 	)
-	default boolean logParams() { return false; }
+	default boolean logParams()
+	{
+		return false;
+	}
 }
