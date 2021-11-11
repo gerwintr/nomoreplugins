@@ -37,6 +37,8 @@ import net.runelite.api.events.*;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.api.widgets.WidgetItem;
+import net.runelite.client.Notifier;
+import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.NpcLootReceived;
@@ -44,11 +46,18 @@ import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.PluginType;
-import net.runelite.client.plugins.botutils.BotUtils;
+import net.runelite.client.plugins.iutils.CalculationUtils;
+import net.runelite.client.plugins.iutils.InterfaceUtils;
+import net.runelite.client.plugins.iutils.InventoryUtils;
+import net.runelite.client.plugins.iutils.MenuUtils;
+import net.runelite.client.plugins.iutils.MouseUtils;
+import net.runelite.client.plugins.iutils.NPCUtils;
+import net.runelite.client.plugins.iutils.ObjectUtils;
+import net.runelite.client.plugins.iutils.PlayerUtils;
+import net.runelite.client.plugins.iutils.WalkUtils;
+import net.runelite.client.plugins.iutils.iUtils;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.HotkeyListener;
-import net.runelite.client.menus.MenuManager;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
@@ -60,13 +69,14 @@ import java.time.Instant;
 
 @Extension
 @PluginDescriptor(
-        name = "Pinq's Gargoyle Fighter",
-        description = "Bops em on the snouse",
-        tags = {"pinqer", "Fishing", "3 Tick", "Tick"},
-        type = PluginType.SKILLING
+        name = "Pinq's fighter",
+        description = "gargoyle",
+        tags = {"pinqer"}
 )
+
+
 @Slf4j
-@PluginDependency(BotUtils.class)
+@PluginDependency(iUtils.class)
 public class GargoyleFighterPlugin extends Plugin {
 
     @Inject
@@ -76,16 +86,46 @@ public class GargoyleFighterPlugin extends Plugin {
     private GargoyleFighterConfig config;
 
     @Inject
-    private BotUtils utils;
+    private iUtils iUtils;
 
     @Inject
     private KeyManager keyManager;
 
     @Inject
-    private MenuManager menuManager;
+    private OverlayManager overlayManager;
 
     @Inject
-    OverlayManager overlayManager;
+    private MouseUtils mouseUtils;
+
+    @Inject
+    private PlayerUtils playerUtils;
+
+    @Inject
+    private InventoryUtils inventoryUtils;
+
+    @Inject
+    private ObjectUtils objectUtils;
+
+    @Inject
+    private InterfaceUtils interfaceUtils;
+
+    @Inject
+    private CalculationUtils calculationUtils;
+
+    @Inject
+    private MenuUtils menuUtils;
+
+    @Inject
+    private NPCUtils npcUtils;
+
+    @Inject
+    private WalkUtils walkUtils;
+
+    @Inject
+    private Notifier notifier;
+
+    @Inject
+    private ChatMessageManager chatMessageManager;
 
     @Inject
     GargoyleFighterOverlay overlay;
@@ -144,7 +184,7 @@ public class GargoyleFighterPlugin extends Plugin {
             return;
         }
 
-        if (utils.isMoving(beforeLoc)) {
+        if (!playerUtils.isAnimating() && !playerUtils.isMoving(beforeLoc)) {
             log.info("Moving");
             beforeLoc = client.getLocalPlayer().getLocalLocation();
             return;
@@ -156,41 +196,37 @@ public class GargoyleFighterPlugin extends Plugin {
             tickDelay--;
             return;
         } else {
-            tickDelay = utils.getRandomIntBetweenRange(0, 1);
+            tickDelay = calculationUtils.getRandomIntBetweenRange(0, 1);
         }
 
         //Alch Code
-        if (utils.inventoryContains(getAlchItem())) {
+        if (inventoryUtils.containsItem(getAlchItem())) {
             status = "Alching";
             log.info("Alching Item");
-            utils.sendGameMessage("alching items");
             highAlchItem();
             return;
         }
 
         // Combat code
-        NPC target = utils.findNearestAttackableNpcWithin(player.getWorldLocation(), 40, "gargoyle", false);
+        NPC target = npcUtils.findNearestAttackableNpcWithin(player.getWorldLocation(), 40, "gargoyle", false);
         if (target != null) { // Found a target
             log.info("Found target");
-            utils.sendGameMessage("found target");
-            NPC targetingCheck = utils.findNearestNpcTargetingLocal("gargoyle", false);
+            NPC targetingCheck = npcUtils.findNearestNpcTargetingLocal("gargoyle", false);
             if (player.getInteracting() != null) { // If player is interacting
                 log.info("Interacting");
-                utils.sendGameMessage("interacting");
                 currentNPC = (NPC) player.getInteracting();
                 log.info(String.valueOf(currentNPC.getHealthRatio()));
                 if (currentNPC.getHealthRatio() < 3) {
-                    tickDelay = utils.getRandomIntBetweenRange(5,7);
+                    tickDelay = calculationUtils.getRandomIntBetweenRange(5,7);
                 }
                 ; // do nothing
             } else if (targetingCheck == null) {
                 status = "Attacking Gargoyle";
-                utils.sendGameMessage("attacking gargoyle");
                 log.info("Attacking new target");
-                targetMenu = new MenuEntry("", target.getName() + "(" + target.getId() + ")", target.getIndex(), MenuOpcode.NPC_SECOND_OPTION.getId(),
+                targetMenu = new MenuEntry("", target.getName() + "(" + target.getId() + ")", target.getIndex(), MenuAction.NPC_SECOND_OPTION.getId(),
                         0, 0, false);
-                utils.delayClickRandomPointCenter(-100, 100, sleepDelay());
-                tickDelay = utils.getRandomIntBetweenRange(4, 6);
+                mouseUtils.delayClickRandomPointCenter(-100, 100, sleepDelay());
+                tickDelay = calculationUtils.getRandomIntBetweenRange(4, 6);
             }
         }
 
@@ -202,19 +238,18 @@ public class GargoyleFighterPlugin extends Plugin {
             //log.info("Modified MenuEntry is null");
         } else {
             log.info("MenuEntry string event: " + targetMenu.toString());
-            utils.sendGameMessage("MenuEntry string event: + targetMenu.toString()");
             event.setMenuEntry(targetMenu);
             targetMenu = null; //this allows the player to interact with the client without their clicks being overridden
         }
     }
 
     private long sleepDelay() {
-        sleepLength = utils.randomDelay(config.sleepWeightedDistribution(), config.sleepMin(), config.sleepMax(), config.sleepDeviation(), config.sleepTarget());
+        sleepLength = calculationUtils.randomDelay(config.sleepWeightedDistribution(), config.sleepMin(), config.sleepMax(), config.sleepDeviation(), config.sleepTarget());
         return sleepLength;
     }
 
     private int tickDelay() {
-        int tickLength = (int) utils.randomDelay(false, 2, 6, 1, 4);
+        int tickLength = (int) calculationUtils.randomDelay(false, 2, 6, 1, 4);
         log.debug("tick delay for {} ticks", tickLength);
         return tickLength;
     }
@@ -222,59 +257,59 @@ public class GargoyleFighterPlugin extends Plugin {
     private void highAlchItem() {
         if (!setHighAlch) {
             targetMenu = new MenuEntry("Cast", "<col=00ff00>High Level Alchemy</col>", 0,
-                    MenuOpcode.WIDGET_TYPE_2.getId(), -1, 14286887, false);
+                    MenuAction.WIDGET_TYPE_2.getId(), -1, 14286887, false);
             Widget spellWidget = client.getWidget(WidgetInfo.SPELL_HIGH_LEVEL_ALCHEMY);
             if (spellWidget != null) {
-                utils.delayClickRandomPointCenter(-100, 100, sleepDelay());
+                mouseUtils.delayClickRandomPointCenter(-100, 100, sleepDelay());
             } else {
-                utils.delayClickRandomPointCenter(-100, 100, sleepDelay());
+                mouseUtils.delayClickRandomPointCenter(-100, 100, sleepDelay());
             }
             setHighAlch = true;
         } else {
-            WidgetItem alchItem = utils.getInventoryWidgetItem(getAlchItem());
+            WidgetItem alchItem = inventoryUtils.getWidgetItem(getAlchItem());
             targetMenu = new MenuEntry("Cast", "<col=00ff00>High Level Alchemy</col><col=ffffff> ->",
                     alchItem.getId(),
-                    MenuOpcode.ITEM_USE_ON_WIDGET.getId(),
+                    MenuAction.ITEM_USE_ON_WIDGET.getId(),
                     alchItem.getIndex(), 9764864,
                     false);
-            utils.delayClickRandomPointCenter(-100, 100, sleepDelay());
+            mouseUtils.delayClickRandomPointCenter(-100, 100, sleepDelay());
             setHighAlch = false;
-            tickDelay = utils.getRandomIntBetweenRange(4, 5);
+            tickDelay = calculationUtils.getRandomIntBetweenRange(4, 5);
         }
     }
 
     private int getAlchItem() { // ALCH LIST
-        if (utils.inventoryContains(ItemID.ADAMANT_PLATELEGS)) {
+        if (inventoryUtils.containsItem(ItemID.ADAMANT_PLATELEGS)) {
             return ItemID.ADAMANT_PLATELEGS;
-        } else if (utils.inventoryContains(ItemID.RUNE_FULL_HELM)) {
+        } else if (inventoryUtils.containsItem(ItemID.RUNE_FULL_HELM)) {
             return ItemID.RUNE_FULL_HELM;
-        } else if (utils.inventoryContains(ItemID.RUNE_2H_SWORD)) {
+        } else if (inventoryUtils.containsItem(ItemID.RUNE_2H_SWORD)) {
             return ItemID.RUNE_2H_SWORD;
-        } else if (utils.inventoryContains(ItemID.ADAMANT_BOOTS)) {
+        } else if (inventoryUtils.containsItem(ItemID.ADAMANT_BOOTS)) {
             return ItemID.ADAMANT_BOOTS;
-        } else if (utils.inventoryContains(ItemID.RUNE_BATTLEAXE)) {
+        } else if (inventoryUtils.containsItem(ItemID.RUNE_BATTLEAXE)) {
             return ItemID.RUNE_BATTLEAXE;
-        } else if (utils.inventoryContains(ItemID.RUNE_PLATELEGS)) {
+        } else if (inventoryUtils.containsItem(ItemID.RUNE_PLATELEGS)) {
             return ItemID.RUNE_PLATELEGS;
-        } else if (utils.inventoryContains(ItemID.MYSTIC_ROBE_TOP_DARK)) {
+        } else if (inventoryUtils.containsItem(ItemID.MYSTIC_ROBE_TOP_DARK)) {
             return ItemID.MYSTIC_ROBE_TOP_DARK;
-        } else if (utils.inventoryContains(ItemID.SHIELD_LEFT_HALF)) {
+        } else if (inventoryUtils.containsItem(ItemID.SHIELD_LEFT_HALF)) {
             return ItemID.SHIELD_LEFT_HALF;
-        } else if (utils.inventoryContains(ItemID.DRAGON_SPEAR)) {
+        } else if (inventoryUtils.containsItem(ItemID.DRAGON_SPEAR)) {
             return ItemID.DRAGON_SPEAR;
-        } else if (utils.inventoryContains(ItemID.RUNE_SPEAR)) {
+        } else if (inventoryUtils.containsItem(ItemID.RUNE_SPEAR)) {
             return ItemID.RUNE_SPEAR;
-        } else if (utils.inventoryContains(ItemID.UNCUT_SAPPHIRE)) {
+        } else if (inventoryUtils.containsItem(ItemID.UNCUT_SAPPHIRE)) {
             return ItemID.UNCUT_SAPPHIRE;
-        } else if (utils.inventoryContains(ItemID.UNCUT_EMERALD)) {
+        } else if (inventoryUtils.containsItem(ItemID.UNCUT_EMERALD)) {
             return ItemID.UNCUT_EMERALD;
-        } else if (utils.inventoryContains(ItemID.UNCUT_RUBY)) {
+        } else if (inventoryUtils.containsItem(ItemID.UNCUT_RUBY)) {
             return ItemID.UNCUT_RUBY;
-        } else if (utils.inventoryContains(ItemID.NATURE_TALISMAN)) {
+        } else if (inventoryUtils.containsItem(ItemID.NATURE_TALISMAN)) {
             return ItemID.NATURE_TALISMAN;
-        } else if (utils.inventoryContains(ItemID.UNCUT_DIAMOND)) {
+        } else if (inventoryUtils.containsItem(ItemID.UNCUT_DIAMOND)) {
             return ItemID.UNCUT_DIAMOND;
-        } else if (utils.inventoryContains(ItemID.RUNE_JAVELIN)) {
+        } else if (inventoryUtils.containsItem(ItemID.RUNE_JAVELIN)) {
             return ItemID.RUNE_JAVELIN;
         }
         return 0;
@@ -287,7 +322,7 @@ public class GargoyleFighterPlugin extends Plugin {
         npcLootReceived.getItems().forEach(itemNPC ->
                 {
                     targetMenu = new MenuEntry("", "", itemNPC.getId(), 20, itemNPC.getLocation().getSceneX(), itemNPC.getLocation().getSceneY(), false);
-                    utils.delayClickRandomPointCenter(-100, 100, sleepDelay());
+                    mouseUtils.delayClickRandomPointCenter(-100, 100, sleepDelay());
                 }
         );
     }

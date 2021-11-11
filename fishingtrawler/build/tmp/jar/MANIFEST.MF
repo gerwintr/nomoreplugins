@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Plugin-Version: 0.0.3
-Plugin-Id: pinqsfishingtrawler-plugin
-Plugin-Provider: illumine
-Plugin-Dependencies: botutils-plugin, chinbreakhandler-plugin
-Plugin-Description: 3 Ticks Flawlessly
-Plugin-License: 3-Clause BSD License
-

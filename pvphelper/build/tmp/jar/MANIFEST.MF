@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Plugin-Version: 0.0.2
-Plugin-Id: pvphelper-plugin
-Plugin-Provider: illumine
-Plugin-Dependencies: botutils-plugin, chinbreakhandler-plugin
-Plugin-Description: Boops gamers on the snouse
-Plugin-License: 3-Clause BSD License
-

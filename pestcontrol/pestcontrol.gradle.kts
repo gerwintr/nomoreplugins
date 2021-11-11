@@ -25,12 +25,11 @@
 
 version = "1.0.2"
 
-project.extra["PluginName"] = "Pinq's Pest Control"
+project.extra["PluginName"] = "Gerwin Pest Control"
 project.extra["PluginDescription"] = "Does Pest Control so you don't have to"
 
 dependencies {
-    compileOnly(group = "com.openosrs.externals", name = "iutils", version = "1.0.0+")
-    compileOnly(group = "com.owain.externals", name = "chinbreakhandler", version = "0.0.13+")
+    compileOnly(group = "com.openosrs.externals", name = "iutils", version = "4.6.6");
 }
 
 tasks {
@@ -42,8 +41,7 @@ tasks {
                     "Plugin-Provider" to project.extra["PluginProvider"],
                     "Plugin-Dependencies" to
                             arrayOf(
-                                    nameToId("iUtils"),
-                                    "chinbreakhandler-plugin"
+                                    nameToId("iUtils")
                             ).joinToString(),
                     "Plugin-Description" to project.extra["PluginDescription"],
                     "Plugin-License" to project.extra["PluginLicense"]

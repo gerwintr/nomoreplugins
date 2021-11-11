@@ -1,20 +1,7 @@
 rootProject.name = "ericsplugins"
 
 include(":pestcontrol")
-include(":mudrunecrafter")
-include(":xptracker")
-include(":tickfishing")
-include(":powerskiller")
-include(":pvphelper")
-include(":nightmarezone")
-include(":minnowsbot")
 include(":gargoylefighter")
-include(":fishingtrawler")
-include(":cursealch")
-include(":tickfishinghotkey")
-include(":zulrah")
-include(":motherloadmine")
-
 
 for (project in rootProject.children) {
     project.apply {

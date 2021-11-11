@@ -27,19 +27,17 @@ package net.runelite.client.plugins.gargoylefighter;
 import net.runelite.client.config.*;
 
 
-@ConfigGroup("autologinthree")
+@ConfigGroup("GargoyleFighter")
 public interface GargoyleFighterConfig extends Config
 {
-	@ConfigTitleSection(
-			keyName = "firstTitle",
-			name = "Gargoyle Fighter config",
+	@ConfigTitle(
+			keyName = "gargoylefighter",
+			name = "gargoyle fighter Config",
 			description = "",
 			position = 1
 	)
-	default Title firstTitle()
-	{
-		return new Title();
-	}
+	String gargoylefighter = "gargoylefighter";
+
 
 	@ConfigItem(
 			keyName = "showOverlay",

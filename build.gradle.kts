@@ -11,7 +11,7 @@ plugins {
     checkstyle
 }
 
-project.extra["GithubUrl"] = "https://github.com/illumineawake/illu-plugins"
+project.extra["GithubUrl"] = "https://github.com/gerwintr/Plugins"
 
 apply<BootstrapPlugin>()
 
@@ -32,9 +32,8 @@ allprojects {
 
 subprojects {
     group = "com.openosrs.externals"
-
-    project.extra["PluginProvider"] = "illumine"
-    project.extra["ProjectSupportUrl"] = "https://discord.gg/9fGzEDR"
+    project.extra["PluginProvider"] = "gerwin"
+    project.extra["ProjectSupportUrl"] = ""
     project.extra["PluginLicense"] = "3-Clause BSD License"
 
     repositories {
@@ -72,10 +71,10 @@ subprojects {
         implementation(group = "org.projectlombok", name = "lombok", version = "1.18.12")
         implementation(group = "org.pushing-pixels", name = "radiance-substance", version = "2.5.1")
 
-        compileOnly("com.openosrs:runelite-api:3.4.3")
-        compileOnly("com.openosrs.rs:runescape-api:3.4.3")
-        compileOnly("com.openosrs:runelite-client:3.4.3")
-        compileOnly("com.openosrs:http-api:3.4.3")
+        compileOnly("com.openosrs:runelite-api:4.12.2")
+        compileOnly("com.openosrs.rs:runescape-api:4.12.2")
+        compileOnly("com.openosrs:runelite-client:4.12.2")
+        compileOnly("com.openosrs:http-api:4.12.2")
 
         compileOnly(Libraries.guice)
         //compileOnly(Libraries.javax)
@@ -83,23 +82,6 @@ subprojects {
         compileOnly(Libraries.pf4j)
     }
 
-    configure<JavaPluginConvention> {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    configure<PublishingExtension> {
-        repositories {
-            maven {
-                url = uri("$buildDir/repo")
-            }
-        }
-        publications {
-            register("mavenJava", MavenPublication::class) {
-                from(components["java"])
-            }
-        }
-    }
 
     tasks {
         withType<JavaCompile> {

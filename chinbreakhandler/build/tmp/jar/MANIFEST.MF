@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Plugin-Version: 0.0.13
-Plugin-Id: chinbreakhandler-plugin
-Plugin-Provider: Eric
-Plugin-Description: Automatically takes breaks for you (?)
-Plugin-License: GNU General Public License v3.0
-

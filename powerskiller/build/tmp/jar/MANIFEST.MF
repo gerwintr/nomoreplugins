@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Plugin-Version: 3.7.5
-Plugin-Id: illuminespowerskiller-plugin
-Plugin-Provider: illumine
-Plugin-Dependencies: botutils-plugin, chinbreakhandler-plugin
-Plugin-Description: auto power skiller plugin
-Plugin-License: 3-Clause BSD License
-

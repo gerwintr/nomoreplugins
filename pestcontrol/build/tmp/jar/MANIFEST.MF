@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
-Plugin-Version: 0.0.3
-Plugin-Id: pinqspestcontrol-plugin
-Plugin-Provider: illumine
-Plugin-Dependencies: botutils-plugin, chinbreakhandler-plugin
+Plugin-Version: 1.0.2
+Plugin-Id: gerwinpestcontrol-plugin
+Plugin-Provider: gerwin
+Plugin-Dependencies: iutils-plugin
 Plugin-Description: Does Pest Control so you don't have to
 Plugin-License: 3-Clause BSD License
 

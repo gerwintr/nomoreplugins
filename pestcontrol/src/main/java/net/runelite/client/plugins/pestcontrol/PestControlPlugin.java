@@ -31,16 +31,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.api.GameObject;
-import net.runelite.api.GameState;
-import net.runelite.api.MenuEntry;
-import net.runelite.api.MenuOpcode;
-import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
-import net.runelite.api.ObjectID;
-import net.runelite.api.Player;
-import net.runelite.api.WallObject;
+import net.runelite.api.*;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuEntryAdded;
@@ -55,7 +47,6 @@ import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.PluginType;
 import net.runelite.client.plugins.iutils.CalculationUtils;
 import net.runelite.client.plugins.iutils.InterfaceUtils;
 import net.runelite.client.plugins.iutils.InventoryUtils;
@@ -75,8 +66,7 @@ import org.pf4j.Extension;
 @PluginDescriptor(
 	name = "Pinq's Pest Control",
 	description = "Does Pest Control so you don't have to",
-	tags = {"pinqer"},
-	type = PluginType.MINIGAME
+	tags = {"pinqer"}
 )
 
 @Slf4j
@@ -95,10 +85,10 @@ public class PestControlPlugin extends Plugin
 	private PestControlConfig config;
 
 	@Inject
-	private iUtils utils;
+	private iUtils iUtils;
 
 	@Inject
-	private MouseUtils mouse;
+	private MouseUtils mouseUtils;
 
 	@Inject
 	private PlayerUtils playerUtils;
@@ -113,7 +103,7 @@ public class PestControlPlugin extends Plugin
 	private InterfaceUtils interfaceUtils;
 
 	@Inject
-	private CalculationUtils calc;
+	private CalculationUtils calculationUtils;
 
 	@Inject
 	private MenuUtils menu;
@@ -198,9 +188,9 @@ public class PestControlPlugin extends Plugin
 					GameObject gangplank = objectUtils.findNearestGameObject(config.boatSelect().getGangplank());
 					if (gangplank != null)
 					{
-						targetMenu = new MenuEntry("", "gangplank", gangplank.getId(), MenuOpcode.GAME_OBJECT_FIRST_OPTION.getId(),
+						targetMenu = new MenuEntry("", "gangplank", gangplank.getId(), MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),
 							gangplank.getSceneMinLocation().getX(), gangplank.getSceneMinLocation().getY(), false);
-						mouse.delayMouseClick(gangplank.getConvexHull().getBounds(), sleepDelay());
+						mouseUtils.delayMouseClick(gangplank.getConvexHull().getBounds(), sleepDelay());
 					}
 				}
 				else if (isInPestControl())
@@ -240,17 +230,17 @@ public class PestControlPlugin extends Plugin
 							if (currentNPC != null && currentNPC.getHealthRatio() == -1)
 							{
 								log.info("Interacting and NPC has no health bar, finding new NPC");
-								targetMenu = new MenuEntry("", target.getName() + "(" + target.getId() + ")", target.getIndex(), MenuOpcode.NPC_SECOND_OPTION.getId(),
+								targetMenu = new MenuEntry("", target.getName() + "(" + target.getId() + ")", target.getIndex(), MenuAction.NPC_SECOND_OPTION.getId(),
 									0, 0, false);
-								mouse.delayMouseClick(target.getConvexHull().getBounds(), sleepDelay());
+								mouseUtils.delayMouseClick(target.getConvexHull().getBounds(), sleepDelay());
 							}
 						}
 						else
 						{
 							log.info("Attacking new target");
-							targetMenu = new MenuEntry("", target.getName() + "(" + target.getId() + ")", target.getIndex(), MenuOpcode.NPC_SECOND_OPTION.getId(),
+							targetMenu = new MenuEntry("", target.getName() + "(" + target.getId() + ")", target.getIndex(), MenuAction.NPC_SECOND_OPTION.getId(),
 								0, 0, false);
-							mouse.delayMouseClick(target.getConvexHull().getBounds(), sleepDelay());
+							mouseUtils.delayMouseClick(target.getConvexHull().getBounds(), sleepDelay());
 						}
 					}
 					else
@@ -259,9 +249,9 @@ public class PestControlPlugin extends Plugin
 						if (gate != null)
 						{
 							log.info("No NPCs found, opening nearest gate");
-							targetMenu = new MenuEntry("", "gate", gate.getId(), MenuOpcode.GAME_OBJECT_FIRST_OPTION.getId(),
+							targetMenu = new MenuEntry("", "gate", gate.getId(), MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),
 								gate.getLocalLocation().getSceneX(), gate.getLocalLocation().getSceneY(), false);
-							mouse.delayMouseClick(gate.getConvexHull().getBounds(), sleepDelay());
+							mouseUtils.delayMouseClick(gate.getConvexHull().getBounds(), sleepDelay());
 						}
 					}
 				}
@@ -276,16 +266,13 @@ public class PestControlPlugin extends Plugin
 	 * Other functions
 	 */
 
-	private long sleepDelay()
-	{
-		sleepLength = calc.randomDelay(config.sleepWeightedDistribution(), config.sleepMin(), config.sleepMax(), config.sleepDeviation(), config.sleepTarget());
-		return calc.randomDelay(config.sleepWeightedDistribution(), config.sleepMin(), config.sleepMax(), config.sleepDeviation(), config.sleepTarget());
+	private long sleepDelay() {
+		sleepLength = calculationUtils.randomDelay(config.sleepWeightedDistribution(), config.sleepMin(), config.sleepMax(), config.sleepDeviation(), config.sleepTarget());
+		return sleepLength;
 	}
 
-	private int tickDelay()
-	{
-		tickLength = (int) calc.randomDelay(config.tickDelayWeightedDistribution(), config.tickDelayMin(), config.tickDelayMax(), config.tickDelayDeviation(), config.tickDelayTarget());
-		log.debug("tick delay for {} ticks", tickLength);
+	private int tickDelay() {
+		tickLength = (int) calculationUtils.randomDelay(false, 1, 2, 1, 1);
 		return tickLength;
 	}
 
@@ -302,7 +289,7 @@ public class PestControlPlugin extends Plugin
 
 	private boolean isInNewGame()
 	{
-		Widget dialog = client.getWidget(WidgetInfo.DIALOG_NPC);
+		Widget dialog = client.getWidget(WidgetInfo.DIALOG_NPC_TEXT);
 		return dialog != null;
 	}
 

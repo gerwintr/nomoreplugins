@@ -29,8 +29,7 @@ project.extra["PluginName"] = "Pinq's Gargoyle Fighter"
 project.extra["PluginDescription"] = "Bops gargoyles on the snousey"
 
 dependencies {
-    compileOnly(group = "com.openosrs.externals", name = "botutils", version = "3.9.6");
-    compileOnly(group = "com.owain.externals", name = "chinbreakhandler", version = "0.0.13+")
+    compileOnly(group = "com.openosrs.externals", name = "iutils", version = "4.6.6");
 }
 
 tasks {
@@ -42,8 +41,7 @@ tasks {
                     "Plugin-Provider" to project.extra["PluginProvider"],
                     "Plugin-Dependencies" to
                             arrayOf(
-                                    "botutils-plugin",
-                                    "chinbreakhandler-plugin"
+                                    nameToId("iUtils")
                             ).joinToString(),
                     "Plugin-Description" to project.extra["PluginDescription"],
                     "Plugin-License" to project.extra["PluginLicense"]
